@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLINIX - Medical CTF Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(221.2 83.2% 53.3%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(221.2 83.2% 53.3%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            blue: {
+              50: "#eff6ff",
+              100: "#dbeafe",
+              600: "#2563eb",
+              700: "#1d4ed8",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground">
+  <div class="flex min-h-screen flex-col">
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 w-full border-b bg-background">
+      <div class="container mx-auto flex h-16 items-center justify-between px-4">
+        <div class="flex items-center gap-6">
+          <a href="{% url "core:index" %}" class="flex items-center gap-2">
+            <img src="images/clinix-logo.png" alt="CLINIX Logo" class="h-8 w-auto">
+          </a>
+        </div>
+        <div class="flex items-center gap-2">
+
+           {% if request.user.is_authenticated %}
+                <a href="{% url "core:logout" %}">
+                     <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Logout</button>
+                </a>
+           {% else %}
+                <a href="{% url "core:login" %}">
+                    <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">Login</button>
+                </a>
+           {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+      <!-- Hero Section -->
+      <section class="py-20 bg-gradient-to-b from-blue-50 to-white">
+        <div class="container mx-auto grid gap-6 text-center px-4">
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+            Welcome to <span class="text-blue-600">CLINIX</span>
+          </h1>
+          <p class="max-w-3xl mx-auto text-xl text-muted-foreground">
+            A medical Capture The Flag platform for healthcare students to solve clinical cases and improve diagnostic
+            skills
+          </p>
+          <div class="flex justify-center gap-4 mt-6">
+            <a href="{% url "core:login" %}">
+              <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-primary-foreground hover:bg-blue-700 h-11 px-8">
+                Get Started
+              </button>
+            </a>
+            <a href="{% url "core:challenges" %}">
+              <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
+                View Challenges
+              </button>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="py-16 container mx-auto px-4">
+        <div class="grid gap-12 md:grid-cols-3">
+          <!-- Feature 1 -->
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="p-6">
+              <div class="mb-4 text-center">
+                <div class="inline-flex items-center justify-center p-3 rounded-full bg-blue-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-blue-600">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-center">Clinical Challenges</h3>
+              <p class="text-center text-muted-foreground mt-2">
+                Solve real-world medical cases with varying levels of difficulty
+              </p>
+            </div>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="p-6">
+              <div class="mb-4 text-center">
+                <div class="inline-flex items-center justify-center p-3 rounded-full bg-blue-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-blue-600">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <path d="M12 17h.01" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-center">Medical Imaging Hints</h3>
+              <p class="text-center text-muted-foreground mt-2">
+                Request MRIs, CT scans, and other imaging to help with your diagnosis
+              </p>
+            </div>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="p-6">
+              <div class="mb-4 text-center">
+                <div class="inline-flex items-center justify-center p-3 rounded-full bg-blue-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-blue-600">
+                    <path d="M2 20h.01" />
+                    <path d="M7 20v-4" />
+                    <path d="M12 20v-8" />
+                    <path d="M17 20v-6" />
+                    <path d="M22 20V8" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-center">Team Competition</h3>
+              <p class="text-center text-muted-foreground mt-2">
+                Form teams, compete on the leaderboard, and improve together
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t py-6">
+      <div class="container mx-auto flex flex-col items-center justify-between gap-4 md:flex-row px-4">
+        <p class="text-sm text-muted-foreground">© 2025 CLINIX. All rights reserved.</p>
+        <nav class="flex gap-4 text-sm text-muted-foreground">
+          <a href="#" class="hover:underline">About</a>
+          <a href="#" class="hover:underline">Contact</a>
+          <a href="#" class="hover:underline">Privacy</a>
+          <a href="#" class="hover:underline">Terms</a>
+        </nav>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
