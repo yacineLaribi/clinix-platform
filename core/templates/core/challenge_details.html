@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chest Pain Evaluation - CLINIX</title>
+  <title>{{challenge.title}} - CLINIX</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -65,7 +65,7 @@
     <header class="sticky top-0 z-50 w-full border-b bg-background">
       <div class="container mx-auto flex h-16 items-center justify-between px-4">
         <div class="flex items-center gap-6">
-          <a href="index.html" class="flex items-center gap-2">
+          <a href="{% url "core:index" %}" class="flex items-center gap-2">
             <img src="images/clinix-logo.png" alt="CLINIX Logo" class="h-8 w-auto">
           </a>
           <nav class="hidden md:flex gap-6">
@@ -201,65 +201,45 @@
                 </p>
               </div>
               <div class="p-6 pt-0">
-                <div id="submission-form">
-                  <form class="space-y-4" onsubmit="submitDiagnosis(event)">
-                    <div class="space-y-2">
-                      <h3 class="font-semibold">Diagnosis</h3>
-                      <textarea id="diagnosis" placeholder="Enter your diagnosis here..." class="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" required></textarea>
-                    </div>
+                {% if not is_submitted %}
+                  <div id="submission-form" >
+                    <form class="space-y-4" name="submission-form" method="POST">
+                      {% csrf_token %}
+                      <div class="space-y-2">
+                        <h3 class="font-semibold">Diagnosis</h3>
+                        <textarea id="diagnosis" name="diagnosis" placeholder="Enter your diagnosis here..." class="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" required></textarea>
+                      </div>
 
-                    <div class="space-y-2">
-                      <h3 class="font-semibold">Treatment Plan</h3>
-                      <textarea id="treatment" placeholder="Enter your treatment plan here..." class="flex min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" required></textarea>
-                    </div>
-
-                    <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
-                      Submit Solution
-                    </button>
-                  </form>
-                </div>
-                {% comment %} ! Submission Results Here {% endcomment %}
-
-                <div id="submission-result" class="space-y-6 hidden">
-                  <div class="rounded-lg bg-green-50 p-6 text-green-800 border border-green-200">
+                      <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+                        Submit Solution
+                      </button>
+                    </form>
+                  </div>
+                
+                {% else %}
+                <div id="submission-result" class="space-y-6">
+                  <div class="rounded-lg bg-blue-50 p-6 text-blue-800 border border-blue-200">
                     <div class="flex items-center gap-2">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="h-5 w-5">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                         <polyline points="22 4 12 14.01 9 11.01" />
                       </svg>
-                      <h3 class="font-bold text-lg">Correct Diagnosis!</h3>
+                      <h3 class="font-bold text-lg">Diagnosis Submitted!</h3>
                     </div>
                     <p class="mt-2">
-                      You've correctly identified this case as an ST-elevation myocardial infarction (STEMI). The
-                      patient's symptoms, risk factors, and diagnostic findings all support this diagnosis.
+                      Your diagnosis has been successfully submitted. You will receive feedback shortly.
+                      
                     </p>
                     <div class="mt-4 pt-4 border-t border-green-200">
-                      <p class="font-medium">Points earned: 200</p>
+                      <p class="font-medium">Points To Earn: {{challenge.points}} points</p>
                     </div>
                   </div>
 
-                  <div class="space-y-2">
-                    <h3 class="font-semibold">Expert Explanation</h3>
-                    <div class="rounded-md bg-muted p-4">
-                      <p class="text-sm">
-                        This patient presented with classic symptoms of an acute myocardial infarction: crushing chest
-                        pain radiating to the left arm and jaw, shortness of breath, and nausea. The patient's risk
-                        factors (hypertension, diabetes, smoking, family history) all increase the likelihood of
-                        coronary artery disease.
-                      </p>
-                      <p class="text-sm mt-2">
-                        The ECG findings of ST-segment elevation in the anterior leads (V1-V4) indicate an anterior wall
-                        STEMI, likely due to occlusion of the left anterior descending artery. The elevated cardiac
-                        biomarkers (Troponin I and CK-MB) confirm myocardial injury.
-                      </p>
-                      <p class="text-sm mt-2">
-                        The appropriate treatment includes immediate reperfusion therapy (primary PCI preferred if
-                        available within 90 minutes, otherwise fibrinolytic therapy), antiplatelet therapy (aspirin,
-                        P2Y12 inhibitor), anticoagulation, and supportive care.
-                      </p>
-                    </div>
-                  </div>
                 </div>
+                {% endif %}
+                {% comment %} ! Submission Results Here {% endcomment %}
+
+
               </div>
             </div>
           </div>
@@ -282,24 +262,12 @@
           <p class="text-sm text-muted-foreground">Analyze these results carefully to help with your diagnosis</p>
         </div>
         <div class="p-6">
-          <div id="hint-ecg" class="space-y-4 hidden">
-            <div class="border rounded-md overflow-hidden">
-              <img src="https://placeholder.com/600x300" alt="ECG Results" class="w-full">
-            </div>
-            <div class="text-sm">
-              <p class="font-medium">ECG Findings:</p>
-              <p>
-                ST-segment elevation in leads V1-V4, reciprocal ST depression in leads II, III, and aVF. Q waves
-                beginning to form in V1-V3.
-              </p>
-            </div>
-          </div>
+
 
           {% for hint in hints %}
               <div id="hint-{{hint.title}}" class="space-y-4 hidden">
                 {% if hint.image %}
-                  <div class="border rounded-md overflow-hidden">
-                    <img src="{{ hint.image_url }}" alt="{{ hint.title }} Results" class="w-full">
+                  <img src="{{ hint.image.url }}" alt="{{ hint.title }} Results" class="w-full">
                   </div>
                 {% endif %}
                 <div class="text-sm">

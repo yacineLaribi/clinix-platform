@@ -1,0 +1,30 @@
+<a href="{% url "core:challenge_details" challenge.id %}" class="block">
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm h-full transition-all hover:shadow-md">
+        <div class="flex flex-col space-y-1.5 p-6 pb-3">
+            <div class="flex items-center justify-between">
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
+                    {{ challenge.type }}
+                </span>
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground">
+                    {{ challenge.points }} pts
+                </span>
+            </div>
+            <h3 class="text-lg font-semibold leading-none tracking-tight pt-2">{{ challenge.title }}</h3>
+            <p class="text-sm text-muted-foreground">{{ challenge.description }}</p>
+        </div>
+        <div class="p-6 pt-0">
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>{{ challenge.solves }} solves</span>
+            </div>
+        </div>
+        <div class="p-6 pt-0">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+                Solve Challenge
+            </button>
+        </div>
+    </div>
+</a>
