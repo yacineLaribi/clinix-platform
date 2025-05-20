@@ -12,6 +12,8 @@ urlpatterns = [
     path('challenges/', views.challenges, name='challenges'),
     path('challenges/<int:pk>/', views.challenge_details, name='challenge_details'),
     path('profile/', views.profile, name='profile'),
+    path('use-hint/<int:hint_id>/', views.use_hint, name='use_hint')
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

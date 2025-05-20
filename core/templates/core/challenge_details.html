@@ -170,7 +170,7 @@
                           {{hint.title}}
                         </div>
                         <div class="p-6 pt-0">
-                          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full" onclick="showHint('{{hint.title}}')">
+                          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full" onclick="showHint({{hint.id}},'{{hint.title}}')">
                             Request {{hint.title}}
                           </button>
                         </div>
@@ -261,6 +261,7 @@
           </div>
           <p class="text-sm text-muted-foreground">Analyze these results carefully to help with your diagnosis</p>
         </div>
+
         <div class="p-6">
 
 
@@ -271,8 +272,8 @@
                   </div>
                 {% endif %}
                 <div class="text-sm">
-                  <p class="font-medium">{{ hint.title }} Findings:</p>
-                  <p>{{ hint.hint_text }}</p>
+                  <p class="font-medium" id="hint-title">{{ hint.title }} Findings:</p>
+                  <p id="hint-body">{{ hint.hint_text }}</p>
                 </div>
               </div>
           {% endfor %}
@@ -318,26 +319,44 @@
     }
     
     // Hint modal functionality
-      function showHint(hintType) {
-        const modal = document.getElementById('hint-modal');
-        const title = document.getElementById('hint-title');
-        
-        // Hide all hint content
-        {% for hint in hints %}
-        document.getElementById('hint-{{ hint.title }}').classList.add('hidden');
-        {% endfor %}
-        
-        // Set title and show appropriate content
-        {% for hint in hints %}
-        if (hintType === '{{ hint.title }}') {
-          title.textContent = '{{ hint.title }} Results';
-          document.getElementById('hint-{{ hint.title }}').classList.remove('hidden');
+const usedHints = {};
+
+  function showHint(hintId, hintTitle) {
+    if (usedHints[hintId]) {
+      displayHintModal(hintTitle, usedHints[hintId]);
+      return;
+    }
+
+    fetch(`/use-hint/${hintId}/`)
+      .then(res => {
+        if (!res.ok) throw new Error("Not enough points");
+        return res.json();
+      })
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+          return;
         }
-        {% endfor %}
-        
-        // Show modal
-        modal.classList.remove('hidden');
-      }
+
+        const hintContent = data.hint_html;
+        usedHints[hintId] = hintContent; // Save it so we don't refetch
+        displayHintModal(hintTitle, hintContent);
+      })
+      .catch(err => {
+        alert(err.message);
+      });
+  }
+
+  function displayHintModal(hintTitle, content) {
+    const modal = document.getElementById('hint-modal');
+    const titleEl = document.getElementById('hint-title');
+    const body = document.getElementById('hint-body');
+
+    titleEl.textContent = `${hintTitle} Results`;
+    body.innerHTML = content;
+
+    modal.classList.remove('hidden');
+  }
     
     function closeHintModal() {
       document.getElementById('hint-modal').classList.add('hidden');

@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect 
+from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 
 def index(request):
@@ -78,3 +79,29 @@ def profile(request):
         return redirect('core:login')  
 
 
+
+# views.py
+from django.http import JsonResponse
+from .models import Hint, UserHint
+from django.shortcuts import get_object_or_404
+
+@login_required
+def use_hint(request, hint_id):
+    hint = get_object_or_404(Hint, pk=hint_id)
+    user = request.user
+
+    # Already used
+    already_used = UserHint.objects.filter(user=user, hint=hint).exists()
+    if already_used:
+        return JsonResponse({'hint_html': render_to_string('partials/hint_content.html', {'hint': hint}), 'charged': False})
+
+    # Not enough points
+    if user.score < hint.value:
+        return JsonResponse({'error': 'Not enough points'}, status=403)
+
+    # Deduct points and save usage
+    user.score -= hint.value
+    user.save()
+    UserHint.objects.create(user=user, hint=hint)
+
+    return JsonResponse({'hint_html': render_to_string('partials/hint_content.html', {'hint': hint}), 'charged': True})

@@ -45,3 +45,11 @@ class Submission(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
     
+# models.py
+class UserHint(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    hint = models.ForeignKey(Hint, on_delete=models.CASCADE)
+    used_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'hint')
