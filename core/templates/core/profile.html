@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenges - CLINIX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(221.2 83.2% 53.3%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(221.2 83.2% 53.3%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            blue: {
+              600: "#2563eb",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground">
+    <div class="flex min-h-screen flex-col">
+        <header class="sticky top-0 z-50 w-full border-b bg-background">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4">
+            <a href="/" class="text-lg font-semibold">CLINIX</a>
+            <nav class="hidden md:flex space-x-4">
+            <a href="/challenges" class="text-sm">Challenges</a>
+            <a href="/profile" class="text-sm">Profile</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-ring">
+            <!-- Mobile menu button -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+            </button>
+        </div>
+        </header>
+    
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <h1 class="text-2xl font-bold mb-4">Profile</h1>
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">User Information</h2>
+                <p><strong>Team Name:</strong> {{ request.user.teamname }}</p>
+                <p><strong>Team ID:</strong> {{ request.user.teamid }}</p>
+
+                <p><strong>Points:</strong> {{ request.user.score }}</p>
+            </div>
+
+            <h2 class="text-xl font-semibold mt-8 mb-4">Submitted Challenges</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for sub in submissions %}
+                    <div class="block">
+                        <div class="rounded-lg bg-gray-100 text-black shadow-sm h-full transition-all">
+                            <div class="flex flex-col space-y-1.5 p-6 pb-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
+                                        {{ sub.challenge.type }}
+                                    </span>
+                                    <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground">
+                                        {{ sub.challenge.points }} pts
+                                    </span>
+                                </div>
+                                <h3 class="text-lg font-semibold leading-none tracking-tight pt-2">{{ sub.challenge.title }}</h3>
+                                <p>{{sub.solution.text}}</p>
+                            </div>
+                            <div class="p-6 pt-0">
+                                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+    
+        <footer class="bg-background text-muted-foreground py-4 text-center">
+        &copy; 2023 CLINIX. All rights reserved.
+        </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // User menu toggle (can be expanded if needed)
+    document.getElementById('user-menu-button').addEventListener('click', function() {
+      // Toggle user dropdown menu
+    });
+  </script>
+</body>
+</html>

@@ -63,3 +63,13 @@ def challenge_details(request , pk):
 
 
     return render(request, 'core/challenge_details.html', {'challenge': challenge, 'hints': hints , 'is_submitted': is_submitted})
+
+
+
+def profile(request):
+    if request.user.is_authenticated:
+        user = request.user
+        submissions = Submission.objects.filter(user=user)
+        return render(request, 'core/profile.html', {'user': user, 'submissions': submissions})
+    else:
+        return redirect('core:login')  

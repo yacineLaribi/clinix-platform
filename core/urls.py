@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('challenges/', views.challenges, name='challenges'),
     path('challenges/<int:pk>/', views.challenge_details, name='challenge_details'),
+    path('profile/', views.profile, name='profile'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
