@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     
@@ -32,6 +32,7 @@ def logout_view(request):
     return redirect('core:login')  # back to login page
 
 from .models import Challenge
+@login_required
 def challenges(request):
     challenges = Challenge.objects.all()  # Assuming you have a Challenge model
     for challenge in challenges:
@@ -40,6 +41,8 @@ def challenges(request):
     return render(request, 'core/challenges.html', {'challenges': challenges})
 
 from .models import Hint, Submission
+from django.db.models import Sum
+@login_required
 def challenge_details(request , pk):
     challenge = Challenge.objects.get(pk=pk)  # Assuming you have a Challenge model
     is_submitted = False
@@ -65,7 +68,7 @@ def challenge_details(request , pk):
     return render(request, 'core/challenge_details.html', {'challenge': challenge, 'hints': hints , 'is_submitted': is_submitted})
 
 
-
+@login_required
 def profile(request):
     if request.user.is_authenticated:
         user = request.user
@@ -73,3 +76,5 @@ def profile(request):
         return render(request, 'core/profile.html', {'user': user, 'submissions': submissions})
     else:
         return redirect('core:login')  
+
+

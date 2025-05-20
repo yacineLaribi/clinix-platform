@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     teamname = models.CharField(max_length=255, unique=True)
     teamid = models.CharField(max_length=255)
-    score = models.IntegerField(default=0)
+    score = models.IntegerField(default=500)
 
     USERNAME_FIELD = 'teamname'
     REQUIRED_FIELDS = ['username']  # keep username to satisfy AbstractUser requirements
