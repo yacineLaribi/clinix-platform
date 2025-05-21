@@ -1,7 +1,7 @@
 <div>
-    <p>{{ hint.hint_text }}</p>
+    <p>{{ hint.hint_text|safe }}</p>
     {% if hint.image %}
       <img src="{{ hint.image.url }}" alt="Hint Image" class="mt-2 rounded" />
     {% endif %}
-  </div>
+</div>
   

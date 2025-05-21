@@ -86,11 +86,6 @@
             </svg>
           </button>
           
-          <div class="relative">
-            <button class="inline-flex items-center justify-center rounded-full h-10 w-10 overflow-hidden border border-input bg-background" id="user-menu-button">
-              <span class="font-medium text-sm">JS</span>
-            </button>
-          </div>
         </div>
       </div>
       
@@ -146,7 +141,7 @@
                 <p class="text-sm text-muted-foreground">Read the case carefully and analyze the symptoms</p>
               </div>
               <div class="p-6 pt-0 space-y-4">
-                  {{challenge.description}}
+                  {{challenge.description | safe}}
               </div>
             </div>
           </div>
@@ -164,13 +159,13 @@
                     {% for hint in hints %}
                       <div class="rounded-lg border border-dashed bg-card text-card-foreground shadow-sm">
                         <div class="flex flex-col space-y-1.5 p-6 pb-2">
-                          <h3 class="text-lg font-semibold leading-none tracking-tight">{{hint.title}}</h3>
+                          <h3 class="text-lg font-semibold leading-none tracking-tight">{{hint.title}} ({{hint.value}} points)</h3>
                         </div>
                         <div class="p-6 pt-0 text-sm text-muted-foreground">
                           {{hint.title}}
                         </div>
                         <div class="p-6 pt-0">
-                          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full" onclick="showHint({{hint.id}},'{{hint.title}}')">
+                          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full" onclick="showHint(`{{hint.id}}`,`{{hint.title}}`)">
                             Request {{hint.title}}
                           </button>
                         </div>
@@ -262,19 +257,16 @@
           <p class="text-sm text-muted-foreground">Analyze these results carefully to help with your diagnosis</p>
         </div>
 
-        <div class="p-6">
+        <div class="p-6" id="hint-body">
 
 
           {% for hint in hints %}
-              <div id="hint-{{hint.title}}" class="space-y-4 hidden">
+              <div id=" hint-{{hint.title}}"  class="space-y-4 h-full hidden">
                 {% if hint.image %}
                   <img src="{{ hint.image.url }}" alt="{{ hint.title }} Results" class="w-full">
                   </div>
                 {% endif %}
-                <div class="text-sm">
-                  <p class="font-medium" id="hint-title">{{ hint.title }} Findings:</p>
-                  <p id="hint-body">{{ hint.hint_text }}</p>
-                </div>
+
               </div>
           {% endfor %}
         </div>
@@ -354,7 +346,6 @@ const usedHints = {};
 
     titleEl.textContent = `${hintTitle} Results`;
     body.innerHTML = content;
-
     modal.classList.remove('hidden');
   }
     
