@@ -36,6 +36,7 @@ from .models import Challenge
 @login_required
 def challenges(request):
     challenges = Challenge.objects.all()  # Assuming you have a Challenge model
+    challenges = challenges.filter(is_visible=True)  # Filter visible challenges
     for challenge in challenges:
         challenge.is_submitted = Submission.objects.filter(user=request.user, challenge=challenge).exists()
 
