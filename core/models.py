@@ -44,7 +44,7 @@ class Submission(models.Model):
     is_correct = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.username} - {self.challenge.title}"
+        return f"{self.user.username} - {self.challenge.title} - {self.challenge.author}"
     
 # models.py
 class UserHint(models.Model):
