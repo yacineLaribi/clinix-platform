@@ -69,6 +69,9 @@
             <a href="{% url "core:profile" %}" class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               Profile
             </a>
+            <a href="{% url "core:leaderboard" %}" class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Leaderboard
+            </a>
           </nav>
         </div>
         <div class="flex items-center gap-2">
@@ -84,20 +87,16 @@
       
       <div class="hidden md:hidden" id="mobile-menu">
         <div class="space-y-1 px-4 py-3 border-t">
-          <a href="challenges.html" class="block text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
+          <a href="{% url "core:challenges" %}" class="block text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
             Challenges
           </a>
-          <a href="leaderboard.html" class="block text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
+          <a href="{% url "core:leaderboard" %}" class="block text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
             Leaderboard
           </a>
-          <a href="team.html" class="block text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
-            Team
+
           </a>
-          <a href="profile.html" class="block text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
-            Profile
-          </a>
-          <a href="index.html" class="block text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
-            Sign out
+          <a href="{% url "core:index" %}" class="block text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-2">
+            Home
           </a>
         </div>
       </div>

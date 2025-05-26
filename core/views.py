@@ -106,3 +106,17 @@ def use_hint(request, hint_id):
     UserHint.objects.create(user=user, hint=hint)
 
     return JsonResponse({'hint_html': render_to_string('partials/hint_content.html', {'hint': hint}), 'charged': True})
+
+@login_required
+def leaderboard(request):
+    users = CustomUser.objects.all().order_by('-score')[:10]
+    return render(request, 'core/leaderboard.html', {'users': users})
+
+@login_required
+def api_leaderboard(request):
+    users = CustomUser.objects.all().order_by('-score')
+    users = users.exclude(is_staff=True)
+    if not users:
+        return JsonResponse({'error': 'No users found'}, status=404)
+    data = [{'teamname': user.teamname, 'score': user.score} for user in users]
+    return JsonResponse(data, safe=False)

@@ -12,7 +12,9 @@ urlpatterns = [
     path('challenges/', views.challenges, name='challenges'),
     path('challenges/<int:pk>/', views.challenge_details, name='challenge_details'),
     path('profile/', views.profile, name='profile'),
-    path('use-hint/<int:hint_id>/', views.use_hint, name='use_hint')
+    path('use-hint/<int:hint_id>/', views.use_hint, name='use_hint'),
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
+    path('api/leaderboard/', views.api_leaderboard, name='api_leaderboard'),
 
 ]
 if settings.DEBUG:
